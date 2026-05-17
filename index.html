@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人简历 | Portfolio</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath d='M9,9 L7,3 L13,7Z' fill='%231a1a1a'/%3E%3Cpath d='M15,7 L21,3 L19,9Z' fill='%231a1a1a'/%3E%3Cellipse cx='14' cy='14' rx='9' ry='8' fill='%231a1a1a'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f8f8f8;--text:#1a1a1a;--card-bg:#fff;--border:rgba(0,0,0,0.06);--border-hover:rgba(0,0,0,0.15);--muted:#bbb;--muted-text:#888;--light-text:#999;--tag-bg:rgba(0,0,0,0.02);--nav-bg:rgba(248,248,248,0.85);--nav-border:rgba(0,0,0,0.04);--hero-bg:#fafafa;--line:rgba(0,0,0,0.03);--btn-bg:rgba(255,255,255,0.8);--shadow:rgba(0,0,0,0.04);--bar-track:rgba(0,0,0,0.06);--bar-fill:#1a1a1a;--paw:#1a1a1a}
+.dark{--bg:#1a1a1a;--text:#e0e0e0;--card-bg:#222;--border:rgba(255,255,255,0.08);--border-hover:rgba(255,255,255,0.2);--muted:#666;--muted-text:#999;--light-text:#777;--tag-bg:rgba(255,255,255,0.04);--nav-bg:rgba(26,26,26,0.9);--nav-border:rgba(255,255,255,0.06);--hero-bg:#202020;--line:rgba(255,255,255,0.04);--btn-bg:rgba(40,40,40,0.85);--shadow:rgba(0,0,0,0.3);--bar-track:rgba(255,255,255,0.15);--bar-fill:#e0e0e0;--paw:#f0f0f0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+::selection{background:var(--text);color:var(--bg)}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--border)}
+::-webkit-scrollbar-thumb{background:var(--muted);border-radius:2px}
+
+/* ============================================= */
+/*  TOP NAVIGATION BAR                            */
+/* ============================================= */
+.top-nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 48px;
+  height:64px;
+  background:var(--nav-bg);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--shadow);
+  transition:all 0.4s ease;
+}
+.top-nav.scrolled{
+  background:var(--nav-bg);
+  box-shadow:0 1px 20px var(--shadow);
+}
+
+/* Nav brand */
+.nav-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+}
+.nav-brand-icon{
+  width:28px;height:28px;
+  position:relative;
+}
+.nav-brand-icon svg{width:100%;height:100%;display:block}
+.nav-brand-text{
+  font-family:'Playfair Display',serif;
+  font-size:0.95rem;
+  font-weight:600;
+  color:var(--text);
+  letter-spacing:0.04em;
+}
+
+/* Nav links */
+.nav-links{
+  display:flex;
+  list-style:none;
+  gap:4px;
+}
+.nav-links a{
+  display:block;
+  padding:6px 18px;
+  font-size:0.7rem;
+  font-weight:400;
+  letter-spacing:0.1em;
+  text-decoration:none;
+  color:#aaa;
+  text-transform:uppercase;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+  border-radius:3px;
+  position:relative;
+}
+.nav-links a:hover{color:#555}
+.nav-links a.active{
+  color:var(--text);
+  background:var(--line);
+}
+.nav-links a .nav-index{
+  display:none;
+}
+
+/* Mobile hamburger */
+.nav-toggle{
+  display:none;
+  flex-direction:column;
+  gap:4px;
+  background:none;border:none;
+  cursor:pointer;
+  padding:8px;
+}
+.nav-toggle span{
+  display:block;
+  width:20px;height:1.5px;
+  background:#1a1a1a;
+  transition:all 0.3s ease;
+  border-radius:1px;
+}
+
+/* Bottom-left side navigation */
+.side-nav{
+  position:fixed;
+  left:28px;
+  bottom:40px;
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  opacity:0;
+  animation:fadeIn 0.7s ease forwards 2s;
+}
+.side-nav a{
+  display:block;
+  font-size:0.55rem;
+  font-weight:400;
+  letter-spacing:0.15em;
+  color:var(--muted);
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:all 0.3s ease;
+  padding:2px 0;
+  line-height:1.4;
+}
+.side-nav a:hover{color:#555}
+.side-nav a.active{color:#1a1a1a}
+
+
+/* Background music toggle */
+.music-toggle{
+  position:fixed;
+  right:28px;
+  bottom:40px;
+  z-index:999;
+  width:36px;height:36px;
+  border-radius:50%;
+  border:1px solid rgba(0,0,0,0.1);
+  background:var(--btn-bg);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s ease;
+  color:var(--light-text);
+  opacity:0;
+  animation:fadeIn 0.7s ease forwards 2.5s;
+}
+.music-toggle:hover{
+  border-color:rgba(0,0,0,0.2);
+  color:var(--text);
+  transform:scale(1.05);
+}
+.music-toggle svg{
+  width:16px;height:16px;
+}
+.music-toggle.playing{
+  color:var(--text);
+  border-color:rgba(0,0,0,0.2);
+  background:var(--btn-bg);
+}
+.music-toggle.playing svg{
+  animation:musicSpin 4s linear infinite;
+}
+@keyframes musicSpin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+.back-top-inline{
+  font-size:0.75rem;
+  letter-spacing:0.15em;
+  color:var(--muted);
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:color 0.3s;
+  padding:10px 20px;
+  display:inline-block;
+}
+.back-top-inline:hover{
+  color:var(--text);
+}
+@media(max-width:768px){
+  .side-nav{display:none}
+}
+
+/* ============================================= */
+/*  HERO — Full-width artistic poster             */
+/* ============================================= */
+#hero{
+  position:relative;
+  width:100%;height:100vh;
+  overflow:hidden;
+  background:var(--hero-bg);
+  display:flex;align-items:center;
+  margin-top:64px;
+}
+
+/* Decorative background */
+.hero-bg-art{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.hero-bg-art .art-line{
+  position:absolute;
+  background:var(--line);
+}
+.hero-bg-art .art-line-v{
+  width:1px;height:200px;
+  top:15%;left:12%;
+  animation:pulseSlow 4s ease-in-out infinite;
+}
+.hero-bg-art .art-line-h{
+  height:1px;width:140px;
+  bottom:30%;right:20%;
+  animation:pulseSlow 5s ease-in-out infinite 0.5s;
+}
+.hero-grain{
+  position:absolute;inset:0;
+  opacity:0.02;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:256px 256px;
+  pointer-events:none;
+}
+
+@keyframes pulseSlow{
+  0%,100%{opacity:0.3}
+  50%{opacity:0.7}
+}
+
+/* Hero content — two-column layout */
+.hero-inner{
+  position:relative;
+  z-index:5;
+  width:100%;
+  display:flex;
+  align-items:center;
+  padding:0 80px;
+  gap:40px;
+}
+
+/* Cat head with gradient animation */
+.hero-cat-group{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:28px;
+  opacity:0;
+  animation:fadeIn 0.7s ease forwards 0.5s;
+}
+.hero-cat-head svg{
+  width:130px;
+  height:auto;
+}
+
+/* Right: Text */
+.hero-text{
+  flex:1;
+  text-align:center;
+}
+.hero-text .brand-tag{
+  font-size:0.55rem;
+  letter-spacing:0.3em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.hero-text h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,6vw,5.5rem);
+  font-weight:700;
+  letter-spacing:0.04em;
+  line-height:0.92;
+  color:var(--text);
+  margin-bottom:0;
+}
+.hero-text h1 .char{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(60px) rotateX(30deg);
+  animation:charUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-text h1 .char:nth-child(1){animation-delay:0.15s}
+.hero-text h1 .char:nth-child(2){animation-delay:0.22s}
+.hero-text h1 .char:nth-child(3){animation-delay:0.29s}
+.hero-text h1 .char:nth-child(4){animation-delay:0.36s}
+.hero-text h1 .char:nth-child(5){animation-delay:0.43s}
+.hero-text h1 .char:nth-child(6){animation-delay:0.50s}
+.hero-text h1 .char:nth-child(7){animation-delay:0.57s}
+.hero-text h1 .char:nth-child(8){animation-delay:0.64s}
+.hero-text h1 .char:nth-child(9){animation-delay:0.71s}
+@keyframes charUp{
+  to{opacity:1;transform:translateY(0) rotateX(0)}
+}
+.hero-text .tagline{
+  font-size:0.8rem;
+  font-weight:300;
+  letter-spacing:0.25em;
+  color:var(--light-text);
+  text-transform:uppercase;
+  line-height:1.8;
+  margin-top:28px;
+  opacity:0;
+  animation:fadeIn 0.7s ease forwards 1.3s;
+}
+.hero-text .location{
+  font-size:0.65rem;
+  letter-spacing:0.3em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-top:12px;
+  opacity:0;
+  animation:fadeIn 0.7s ease forwards 1.6s;
+}
+@keyframes fadeIn{to{opacity:1}}
+
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;
+  bottom:36px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;
+  animation:fadeIn 0.8s ease forwards 2s;
+}
+.scroll-hint span{
+  font-size:0.55rem;
+  letter-spacing:0.25em;
+  color:#ccc;
+  text-transform:uppercase;
+}
+.scroll-hint .scroll-line{
+  width:1px;height:36px;
+  background:linear-gradient(to bottom,#ccc,transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{transform:scaleY(0.5);opacity:0.3}
+  50%{transform:scaleY(1);opacity:1}
+}
+
+/* Cat eye blink */
+@keyframes eyeBlink{
+  0%, 92%, 100%{opacity:1}
+  96%{opacity:0}
+}
+.hero-eyes{
+  animation:eyeBlink 3.5s ease-in-out infinite;
+}
+
+
+/* ============================================= */
+/*  MAIN CONTENT (no sidebar)                     */
+/* ============================================= */
+main{
+  max-width:880px;
+  margin:0 auto;
+  padding:100px 80px 140px;
+}
+
+/* ===== SECTIONS ===== */
+.section{
+  padding:100px 0;
+  opacity:0;
+  transform:translateY(60px);
+  transition:all 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.section.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.section:first-child{padding-top:40px}
+
+.section-header{
+  margin-bottom:48px;
+}
+.section-header .section-number{
+  font-size:0.6rem;
+  font-weight:500;
+  letter-spacing:0.18em;
+  color:#ccc;
+  margin-bottom:10px;
+}
+.section-header h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.6rem,2.8vw,2.6rem);
+  font-weight:600;
+  color:var(--text);
+  letter-spacing:0.02em;
+  line-height:1.25;
+}
+.section-header .section-line{
+  width:36px;height:1px;
+  background:var(--muted);
+  margin-top:14px;
+}
+
+/* ===== ABOUT ===== */
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+}
+.about-text p{
+  color:var(--muted-text);
+  font-size:0.9rem;
+  font-weight:300;
+  line-height:1.9;
+  margin-bottom:18px;
+}
+.about-text p:first-child{
+  font-size:1.05rem;
+  color:var(--text);
+  font-weight:400;
+}
+.about-detail{display:flex;flex-direction:column;gap:22px}
+.detail-item{display:flex;flex-direction:column;gap:3px}
+.detail-item .label{
+  font-size:0.6rem;
+  letter-spacing:0.15em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.detail-item .value{
+  font-size:0.85rem;
+  color:#555;
+  font-weight:300;
+}
+
+/* ===== TIMELINE ===== */
+.timeline{position:relative}
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;
+  width:1px;height:100%;
+  background:var(--border);
+}
+.timeline-item{
+  position:relative;
+  padding-left:36px;
+  padding-bottom:52px;
+}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-item::before{
+  content:'';
+  position:absolute;
+  left:-3px;top:7px;
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#e0e0e0;
+  border:2px solid #fff;
+  transition:all 0.5s ease;
+}
+.timeline-item:hover::before{
+  background:#1a1a1a;
+  box-shadow:0 0 24px rgba(0,0,0,0.08);
+}
+.timeline-item .period{
+  font-size:0.6rem;
+  letter-spacing:0.15em;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+.timeline-item h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:3px;
+}
+.timeline-item .company{
+  font-size:0.78rem;
+  color:var(--light-text);
+  margin-bottom:10px;
+  font-weight:300;
+}
+.timeline-item p{
+  font-size:0.85rem;
+  color:var(--muted-text);
+  font-weight:300;
+  line-height:1.8;
+}
+
+/* ===== SKILLS ===== */
+.skills-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:36px;
+}
+.skill-category h4{
+  font-family:'Playfair Display',serif;
+  font-size:0.9rem;
+  color:var(--text);
+  margin-bottom:14px;
+  font-weight:600;
+}
+.skill-tags{
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.skill-tags span{
+  padding:5px 16px;
+  font-size:0.72rem;
+  color:var(--muted-text);
+  border:1px solid var(--border);
+  border-radius:20px;
+  transition:all 0.4s ease;
+  cursor:default;
+}
+.skill-tags span:hover{
+  border-color:var(--text);
+  background:var(--tag-bg);
+}
+
+/* Category proficiency bar */
+.skill-category-bar{
+  margin-bottom:16px;
+}
+.skill-category-bar .bar-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:0.65rem;
+  color:var(--muted);
+  margin-bottom:5px;
+  letter-spacing:0.03em;
+}
+.skill-category-bar .bar-track{
+  width:100%;
+  height:3px;
+  background:var(--bar-track);
+  border-radius:2px;
+  overflow:hidden;
+}
+.skill-category-bar .bar-fill{
+  height:100%;
+  border-radius:2px;
+  background:var(--bar-fill);
+  width:0;
+  transition:width 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.section.visible .skill-category-bar .bar-fill{
+  /* width via inline style */
+}
+
+/* ===== PROJECTS ===== */
+.projects-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+/* Project category divider */
+.project-category{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:48px 0 24px;
+}
+.project-category:first-of-type{margin-top:0}
+.project-category-line{
+  width:24px;height:1px;
+  background:var(--muted);
+}
+.project-category-label{
+  font-size:0.6rem;
+  font-weight:500;
+  letter-spacing:0.18em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+/* Media project cards */
+.project-media{
+  position:relative;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:4px;
+  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+  cursor:default;
+  overflow:hidden;
+}
+.project-media::before{
+  content:'';
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  background:linear-gradient(135deg,rgba(0,0,0,0.015),transparent);
+  opacity:0;
+  transition:opacity 0.5s ease;
+  z-index:1;
+  pointer-events:none;
+}
+.project-media:hover::before{opacity:1}
+.project-media:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-3px);
+}
+.project-media .media-wrapper{
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  background:#f5f5f5;
+}
+.project-media .media-wrapper video,
+.project-media .media-wrapper img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+.project-media .media-wrapper{
+  cursor:pointer;
+  position:relative;
+}
+.project-media .media-wrapper:has(video)::after{
+  content:'▶';
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:44px;height:44px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.3);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.7);
+  font-size:18px;
+  transition:all 0.3s ease;
+  pointer-events:none;
+  z-index:2;
+  border:2px solid rgba(255,255,255,0.25);
+}
+.project-media .media-wrapper:has(video):hover::after{
+  background:rgba(0,0,0,0.5);
+  border-color:rgba(255,255,255,0.5);
+  transform:translate(-50%,-50%) scale(1.1);
+  color:#fff;
+}
+.project-full{
+  grid-column:1 / -1;
+}
+
+/* Photo grid - 3 columns */
+.photo-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.photo-carousel{
+  position:relative;
+  overflow:hidden;
+  margin-top:20px;
+  grid-column:1 / -1;
+}
+.carousel-track{
+  display:flex;
+  transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.carousel-track .project-media{
+  flex:0 0 100%;
+  min-width:0;
+}
+.carousel-dots{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:16px;
+}
+.carousel-dots .dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--muted);
+  cursor:pointer;
+  transition:all 0.3s ease;
+  border:none;
+  padding:0;
+}
+.carousel-dots .dot.active{
+  background:var(--text);
+  width:20px;
+  border-radius:3px;
+}
+
+
+/* Photo lightbox */
+.photo-lightbox{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.88);
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.3s ease;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.photo-lightbox.active{
+  opacity:1;
+  pointer-events:all;
+}
+.photo-lightbox img{
+  max-width:90vw;
+  max-height:85vh;
+  width:auto;
+  height:auto;
+  border-radius:6px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.5);
+  object-fit:contain;
+}
+.photo-lightbox .pl-close{
+  position:fixed;
+  top:24px;right:24px;
+  width:36px;height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  border:none;
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.3s;
+}
+.photo-lightbox .pl-close:hover{
+  background:rgba(255,255,255,0.25);
+}
+
+/* Message board */
+.message-box{
+  max-width:500px;
+  margin:0 auto;
+}
+.message-box textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:4px;
+  font-size:0.85rem;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  resize:vertical;
+  transition:border-color 0.3s;
+  line-height:1.6;
+}
+.message-box textarea:focus{
+  outline:none;
+  border-color:var(--border-hover);
+}
+.msg-btn{
+  padding:8px 28px;
+  font-size:0.75rem;
+  letter-spacing:0.1em;
+  border:1px solid var(--text);
+  background:var(--text);
+  color:var(--bg);
+  border-radius:3px;
+  cursor:pointer;
+  transition:all 0.3s;
+  font-family:'Inter',sans-serif;
+  text-transform:uppercase;
+}
+.msg-btn:hover{
+  opacity:0.8;
+}
+.msg-btn:disabled{
+  opacity:0.3;
+  cursor:not-allowed;
+}
+/* Admin panel */
+.admin-overlay{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.6);
+  z-index:10000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.3s;
+}
+.admin-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+.admin-panel{
+  background:var(--bg);
+  padding:28px;
+  border-radius:6px;
+  width:400px;
+  max-width:90vw;
+  max-height:80vh;
+  position:relative;
+  box-shadow:0 8px 40px rgba(0,0,0,0.2);
+}
+.admin-close{
+  position:absolute;
+  top:12px;right:12px;
+  background:none;border:none;
+  font-size:16px;
+  cursor:pointer;
+  color:var(--muted);
+  padding:4px;
+}
+.admin-msg-item{
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.8rem;
+  color:var(--text);
+  line-height:1.5;
+}
+.admin-msg-item:last-child{border-bottom:none}
+.admin-msg-time{
+  font-size:0.6rem;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* ===== CONTACT ===== */
+.contact-links{
+  display:flex;flex-direction:column;gap:16px;
+}
+.contact-item{
+  display:flex;align-items:center;gap:16px;
+  text-decoration:none;
+  color:var(--muted-text);
+  font-size:0.85rem;
+  font-weight:300;
+  padding:14px 24px;
+  border:1px solid var(--border);
+  border-radius:4px;
+  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.contact-item:hover{
+  border-color:rgba(0,0,0,0.2);
+  color:var(--text);
+  padding-left:32px;
+}
+.contact-item .contact-label{
+  font-size:0.58rem;
+  letter-spacing:0.14em;
+  color:var(--muted);
+  min-width:55px;
+  text-transform:uppercase;
+}
+.contact-icon{
+  width:16px;
+  height:16px;
+  flex-shrink:0;
+  opacity:0.35;
+  transition:opacity 0.3s;
+}
+.contact-item:hover .contact-icon{
+  opacity:0.7;
+}
+.side-qr{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+.qr-code{
+  width:32px;
+  height:32px;
+  border-radius:3px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  opacity:0.5;
+  display:block;
+}
+.qr-code:hover{
+  opacity:1;
+  transform:scale(3);
+  transform-origin:bottom left;
+  box-shadow:0 4px 20px var(--border-hover);
+  border-radius:4px;
+}
+
+/* ===== FOOTER ===== */
+.site-footer{
+  text-align:center;
+  padding:40px 20px 60px;
+  font-size:0.55rem;
+  color:#ddd;
+  letter-spacing:0.05em;
+  border-top:1px solid var(--shadow);
+}
+
+/* ============================================= */
+/*  MOUSE FOLLOWER — Cat Paw                      */
+/* ============================================= */
+.follower{
+  position:fixed;
+  width:22px;height:22px;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width 0.4s,height 0.4s;
+}
+.follower svg{
+  width:100%;height:100%;
+  display:block;
+}
+.follower.hover{
+  width:38px;height:38px;
+}
+
+/* Click paw print trail */
+.paw-print{
+  position:fixed;
+  width:18px;height:18px;
+  pointer-events:none;
+  z-index:9998;
+  transform:translate(-50%,-50%);
+  animation:pawFade 2.8s ease-out forwards;
+  color:var(--paw);
+}
+@keyframes pawFade{
+  0%{opacity:0.5;transform:translate(-50%,-50%) scale(0.4)}
+  20%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.2) translateY(-15px)}
+}
+
+/* ============================================= */
+/*  RESPONSIVE                                    */
+/* ============================================= */
+@media(max-width:900px){
+  .top-nav{padding:0 20px}
+  .nav-links{
+    position:fixed;
+    top:64px;left:0;right:0;
+    flex-direction:column;
+    background:rgba(248,248,248,0.98);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--shadow);
+    padding:12px 20px;
+    gap:2px;
+    display:none;
+  }
+  .nav-links.open{display:flex}
+  .nav-toggle{display:flex}
+  .hero-inner{
+    flex-direction:column;
+    padding:0 28px;
+    gap:20px;
+    text-align:center;
+  }
+  .hero-cat-area{flex:0 0 auto;max-width:240px}
+  .hero-text{padding-right:0}
+  main{padding:60px 28px 100px}
+  .about-grid,.skills-grid,.projects-grid,.photo-grid{grid-template-columns:1fr}
+  .timeline-item{padding-left:24px}
+}
+@media(min-width:901px)and(max-width:1200px){
+  .top-nav{padding:0 32px}
+  .hero-inner{padding:0 40px;gap:40px}
+  .hero-cat-area{flex:0 0 40%}
+  main{padding:80px 44px 120px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== MOUSE FOLLOWER ===== -->
+<div class="follower" id="follower">
+  <svg viewBox="0 0 22 22" fill="var(--paw)" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5,14 C3,10 19,10 17,14 C15,20 7,20 5,14Z"/>
+    <circle cx="5.5" cy="7.5" r="2.5"/>
+    <circle cx="10.5" cy="5.5" r="2.5"/>
+    <circle cx="15.5" cy="7.5" r="2.5"/>
+    <circle cx="10.5" cy="10" r="2"/>
+  </svg>
+</div>
+
+<!-- ============================================= -->
+<!--  TOP NAVIGATION                                -->
+<!-- ============================================= -->
+<nav class="top-nav" id="topNav">
+  <a href="#" class="nav-brand">
+    <div class="nav-brand-icon">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9,9 L7,3 L13,7Z" fill="var(--text)"/>
+        <path d="M15,7 L21,3 L19,9Z" fill="var(--text)"/>
+        <ellipse cx="14" cy="14" rx="9" ry="8" fill="var(--text)"/>
+      </svg>
+    </div>
+    <span class="nav-brand-text">Portfolio</span>
+  </a>
+
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" data-section="about" class="active">About</a></li>
+    <li><a href="#experience" data-section="experience">Experience</a></li>
+    <li><a href="#education" data-section="education">Education</a></li>
+    <li><a href="#skills" data-section="skills">Skills</a></li>
+    <li><a href="#projects" data-section="projects">Projects</a></li>
+    <li><a href="#contact" data-section="contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ===== SIDE NAV (bottom left) ===== -->
+<nav class="side-nav" id="sideNav">
+  <a href="#about" data-section="about" class="active">About</a>
+  <a href="#experience" data-section="experience">Experience</a>
+  <a href="#education" data-section="education">Education</a>
+  <a href="#skills" data-section="skills">Skills</a>
+  <a href="#projects" data-section="projects">Projects</a>
+  <a href="#contact" data-section="contact">Contact</a>
+  <div class="side-qr">
+    <img loading="lazy" src="二维码.png" alt="微信二维码" class="qr-code">
+  </div>
+</nav>
+
+<!-- ============================================= -->
+<!--  HERO — Artistic Poster                        -->
+<!-- ============================================= -->
+<section id="hero">
+  <div class="hero-bg-art">
+    <div class="art-line art-line-v"></div>
+    <div class="art-line art-line-h"></div>
+  </div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-inner">
+    <!-- Text -->
+    <div class="hero-text">
+      <div class="hero-cat-group">
+        <div class="hero-cat-head">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="catGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a1a1a"/>
+                <stop offset="100%" stop-color="#1a1a1a">
+                  <animate attributeName="stop-color"
+                           values="#1a1a1a;#777;#1a1a1a"
+                           dur="3s" repeatCount="indefinite"/>
+                </stop>
+              </linearGradient>
+            </defs>
+            <path d="M9,9 L7,3 L13,7Z" fill="url(#catGrad)"/>
+            <path d="M15,7 L21,3 L19,9Z" fill="url(#catGrad)"/>
+            <ellipse cx="14" cy="14" rx="9" ry="8" fill="url(#catGrad)"/>
+            <g class="hero-eyes">
+              <ellipse cx="10" cy="11" rx="2.5" ry="3" fill="#f0f0f0"/>
+              <ellipse cx="10" cy="11" rx="1.2" ry="2" fill="#333"/>
+              <ellipse cx="10" cy="11" rx="0.7" ry="1.5" fill="#1a1a1a"/>
+              <ellipse cx="9.5" cy="10" rx="0.4" ry="0.3" fill="#fff" opacity="0.9"/>
+              <ellipse cx="18" cy="11" rx="2.5" ry="3" fill="#f0f0f0"/>
+              <ellipse cx="18" cy="11" rx="1.2" ry="2" fill="#333"/>
+              <ellipse cx="18" cy="11" rx="0.7" ry="1.5" fill="#1a1a1a"/>
+              <ellipse cx="17.5" cy="10" rx="0.4" ry="0.3" fill="#fff" opacity="0.9"/>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+
+      <div class="brand-tag">CHENKEYI 2026</div>
+      <h1>
+        <span class="char">P</span>
+        <span class="char">O</span>
+        <span class="char">R</span>
+        <span class="char">T</span>
+        <span class="char">F</span>
+        <span class="char">O</span>
+        <span class="char">L</span>
+        <span class="char">I</span>
+        <span class="char">O</span>
+      </h1>
+            <div class="tagline">Operation & AI Designer</div>
+      <div class="location">Based in 温州</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!--  MAIN CONTENT                                  -->
+<!-- ============================================= -->
+<main>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="section-header">
+      <div class="section-number">01 / About</div>
+      <h2>关于我</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>电商运营与 AI 应用从业者，熟悉从选品、拍摄到推广的全链路运营流程。</p>
+        <p>目前从事跨境电商运营，主要平台包括 Amazon 和 TikTok，积累了一套成熟的跨境选品与推广策略。</p>
+        <p>此前深耕国内电商多年，操盘过抖音、天猫、京东、唯品会等主流平台，对国内电商生态有深刻理解。</p>
+        <p>擅长将 AI 工具（Comfyui、Lovart、Claude Code 等）融入日常工作中，用技术手段提升内容创作与运营效率。始终相信好工具 + 好策略 = 好结果。</p>
+      </div>
+      <div class="about-detail">
+        <div class="detail-item">
+          <span class="label">Name</span>
+          <span class="value">陈可以</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Location</span>
+          <span class="value">温州</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Email</span>
+          <span class="value">605286836@qq.com</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Focus</span>
+          <span class="value">电商运营 / AI运营</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <div class="section-header">
+      <div class="section-number">02 / Experience</div>
+      <h2>工作经历</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="period">2014 — 2018</div>
+        <h3>新媒体运营</h3>
+        <div class="company">深圳市欧雷亚时机珠宝有限公司</div>
+        <p>全面负责店铺日常运营管理，统筹产品选品、上架及库存控制。定期撰写数据分析报告，深入挖掘销售数据，为运营策略调整提供数据支持。主导产品拍摄工作，确保视觉呈现符合品牌调性，提升商品转化率。</p>
+      </div>
+      <div class="timeline-item">
+        <div class="period">2018 — 2024</div>
+        <h3>电商运营</h3>
+        <div class="company">温州可以网络科技有限公司</div>
+        <p>自己做巨量引擎，负责所有流程工作，从选品-拍摄-上架-推广-进货-发货-售后等</p>
+      </div>
+      <div class="timeline-item">
+        <div class="period">2025 — Present</div>
+        <h3>AI运营</h3>
+        <div class="company">温州金贝生物科技有限公司</div>
+        <p>熟悉 Comfyui、Lovart、即梦、OpenClaw、Claude Code、Hermes、Codex 等 AI 工具的运用，以及 AI 编导、视频内容制作。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section" id="education">
+    <div class="section-header">
+      <div class="section-number">03 / Education</div>
+      <h2>教育背景</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="period">2010 — 2014</div>
+        <h3>本科</h3>
+        <div class="company">景德镇陶瓷大学</div>
+        <p>工业设计</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="section-header">
+      <div class="section-number">04 / Skills</div>
+      <h2>专业技能</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <h4>设计工具</h4>
+        <div class="skill-category-bar">
+          <div class="bar-label"><span>熟练度</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-tags">
+          <span>UI/UX Design</span><span>Lovart</span><span>3D Max</span><span>Adobe PR</span>
+          <span>Photoshop</span><span>Comfyui</span><span>即梦</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h4>开发</h4>
+        <div class="skill-category-bar">
+          <div class="bar-label"><span>熟练度</span><span>75%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-tags">
+          <span>OpenClaw</span><span>Hermes</span><span>Claude Code</span><span>Codex</span><span>Kimi Code</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h4>语言</h4>
+        <div class="skill-category-bar">
+          <div class="bar-label"><span>熟练度</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-tags">
+          <span>中文 (母语)</span><span>English</span><span>温州话 (日常会話)</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h4>其他</h4>
+        <div class="skill-category-bar">
+          <div class="bar-label"><span>熟练度</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-tags">
+          <span>项目管理</span><span>团队协作</span><span>创意思维</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section-header">
+      <div class="section-number">05 / Projects</div>
+      <h2>代表作品</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Video Works -->
+    <div class="project-category">
+      <div class="project-category-line"></div>
+      <span class="project-category-label">视频作品</span>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card project-media project-full">
+        <div class="media-wrapper">
+          <video src="微信视频2026-05-11_210205_450.mp4" autoplay muted loop playsinline></video>
+        </div>
+      </div>
+      <div class="project-card project-media project-full">
+        <div class="media-wrapper">
+          <video src="微信视频2026-05-11_210900_854.mp4" autoplay muted loop playsinline></video>
+        </div>
+      </div>
+      <div class="project-card project-media">
+        <div class="media-wrapper">
+          <video src="微信视频2026-05-11_210911_497.mp4" autoplay muted loop playsinline></video>
+        </div>
+      </div>
+      <div class="project-card project-media">
+        <div class="media-wrapper">
+          <video src="微信视频2026-05-11_210951_974.mp4" autoplay muted loop playsinline></video>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photography Works -->
+    <div class="project-category">
+      <div class="project-category-line"></div>
+      <span class="project-category-label">摄影作品</span>
+    </div>
+    <div class="photo-grid">
+      <div class="project-card project-media">
+        <div class="media-wrapper">
+          <img loading="lazy" src="微信图片_20260511210751_21_120.jpg" alt="摄影作品">
+        </div>
+      </div>
+      <div class="project-card project-media">
+        <div class="media-wrapper">
+          <img loading="lazy" src="微信图片_20260511210756_22_120.jpg" alt="摄影作品">
+        </div>
+      </div>
+      <div class="project-card project-media">
+        <div class="media-wrapper">
+          <img loading="lazy" src="微信图片_20260511210800_23_120.jpg" alt="摄影作品">
+        </div>
+      </div>
+      <div class="project-card project-media">
+        <div class="media-wrapper">
+          <img loading="lazy" src="微信图片_20260511210804_24_120.jpg" alt="摄影作品">
+        </div>
+      </div>
+      <div class="photo-carousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="project-card project-media">
+            <div class="media-wrapper">
+              <img loading="lazy" src="微信图片_20260511210819_25_120.jpg" alt="摄影作品">
+            </div>
+          </div>
+          <div class="project-card project-media">
+            <div class="media-wrapper">
+              <img loading="lazy" src="微信图片_20260511210823_26_120.jpg" alt="摄影作品">
+            </div>
+          </div>
+        </div>
+        <div class="carousel-dots" id="carouselDots">
+          <span class="dot active" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="section-header">
+      <div class="section-number">06 / Contact</div>
+      <h2>联系方式</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:605286836@qq.com" class="contact-item">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+        <span class="contact-label">Email</span>
+        <span>605286836@qq.com</span>
+      </a>
+      <a href="tel:+8618368735352" class="contact-item">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.8 12.8 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.8 12.8 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        <span class="contact-label">Phone</span>
+        <span>+86 18368735352</span>
+      </a>
+      <a href="javascript:void(0)" class="contact-item" id="wechatContact">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9m-9 9a9 9 0 019-9"/></svg>
+        <span class="contact-label">WeChat</span>
+        <span>chenky827</span>
+      </a>
+<a href="https://github.com/CHENKEYI-MAKER/-01" target="_blank" class="contact-item">
+        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        <span class="contact-label">GitHub</span>
+        <span>github.com/CHENKEYI-MAKER</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- MESSAGE BOARD -->
+  <section class="section" id="message">
+    <div class="section-header">
+      <div class="section-number">07 / Message</div>
+      <h2>给我留言</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="message-box">
+      <textarea id="msgInput" placeholder="写下你想说的话…" rows="3"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <span style="font-size:0.6rem;color:var(--muted);letter-spacing:0.05em">你的留言只有我能看到</span>
+        <button class="msg-btn" id="msgSubmit">发送</button>
+      </div>
+      <div id="msgStatus" style="font-size:0.7rem;color:var(--muted-text);margin-top:8px;text-align:center"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN PANEL (hidden) -->
+  <div class="admin-overlay" id="adminOverlay">
+    <div class="admin-panel">
+      <button class="admin-close" id="adminClose">&#10005;</button>
+      <div style="margin-bottom:16px">
+        <input type="password" id="adminPwd" placeholder="输入管理密码" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:4px;font-size:0.85rem;background:var(--bg);color:var(--text)">
+      </div>
+      <button class="msg-btn" id="adminLogin" style="width:100%">查看留言</button>
+      <div id="adminMsgs" style="margin-top:16px;max-height:400px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:20px 0 40px">
+    <a href="#" class="back-top-inline" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">↑ 返回顶部</a>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">&copy; 2026 &mdash; All Rights Reserved</footer>
+
+<!-- ===== BACKGROUND MUSIC TOGGLE ===== -->
+<button class="music-toggle" id="musicToggle" aria-label="Toggle music">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V5l12-2v13"/>
+    <circle cx="6" cy="18" r="3"/>
+    <circle cx="18" cy="16" r="3"/>
+  </svg>
+</button>
+
+<!-- ===== DARK MODE TOGGLE ===== -->
+<button class="music-toggle" id="darkToggle" aria-label="Toggle dark mode" style="bottom:86px">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dark-icon">
+    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+  </svg>
+</button>
+
+<audio id="bgAudio" loop autoplay preload="auto">
+  <source src="background-music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===== PHOTO LIGHTBOX ===== -->
+<div class="photo-lightbox" id="photoLightbox">
+  <button class="pl-close" id="plClose">&#10005;</button>
+  <img id="plImage" src="" alt="">
+</div>
+
+<script>
+// =============================================
+// 1. NAV SCROLL EFFECT
+// =============================================
+const topNav = document.getElementById('topNav');
+window.addEventListener('scroll', () => {
+  topNav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// =============================================
+// 2. MOBILE NAV TOGGLE
+// =============================================
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+
+navToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+
+// Close on link click
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  });
+});
+
+// =============================================
+// 3. SCROLL SPY
+// =============================================
+const sections = document.querySelectorAll('.section');
+const navAnchors = document.querySelectorAll('.nav-links a');
+
+function updateActiveNav(){
+  let current = '';
+  const scrollPos = window.scrollY + window.innerHeight * 0.3;
+
+  sections.forEach(s => {
+    if(s.offsetTop <= scrollPos && s.offsetTop + s.offsetHeight > scrollPos){
+      current = s.id;
+    }
+  });
+
+  navAnchors.forEach(link => {
+    link.classList.toggle('active', link.dataset.section === current);
+  });
+  document.querySelectorAll('.side-nav a').forEach(link => {
+    link.classList.toggle('active', link.dataset.section === current);
+  });
+}
+
+// =============================================
+// 4. SECTION REVEAL
+// =============================================
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+document.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
+
+// =============================================
+// 5. HERO SCROLL PARALLAX
+// =============================================
+const hero = document.getElementById('hero');
+
+window.addEventListener('scroll', () => {
+  const rect = hero.getBoundingClientRect();
+  if(rect.bottom > 0){
+    const scrolled = -rect.top;
+    const progress = Math.min(scrolled / window.innerHeight, 1);
+    hero.style.transform = `scale(${1 - progress * 0.02})`;
+    hero.style.opacity = 1 - progress;
+  }
+});
+
+// =============================================
+// 6. HERO MOUSE PARALLAX
+// =============================================
+hero.addEventListener('mousemove', (e) => {
+  const cat = document.querySelector('.hero-cat-group');
+  if(cat){
+    const x = (e.clientX / window.innerWidth - 0.5) * 10;
+    const y = (e.clientY / window.innerHeight - 0.5) * 10;
+    cat.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  }
+});
+
+// =============================================
+// 7. MOUSE FOLLOWER
+// =============================================
+const follower = document.getElementById('follower');
+
+document.addEventListener('mousemove', (e) => {
+  follower.style.left = e.clientX + 'px';
+  follower.style.top = e.clientY + 'px';
+});
+
+document.querySelectorAll('a, button, .project-card, .skill-tags span, .contact-item').forEach(el => {
+  el.addEventListener('mouseenter', () => follower.classList.add('hover'));
+  el.addEventListener('mouseleave', () => follower.classList.remove('hover'));
+});
+
+// =============================================
+// 8. CLICK PAW PRINT TRAIL
+// =============================================
+const pawSVG = '<svg viewBox="0 0 22 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5,14 C3,10 19,10 17,14 C15,20 7,20 5,14Z"/><circle cx="5.5" cy="7.5" r="2.5"/><circle cx="10.5" cy="5.5" r="2.5"/><circle cx="15.5" cy="7.5" r="2.5"/><circle cx="10.5" cy="10" r="2"/></svg>';
+
+document.addEventListener('click', (e) => {
+  const paw = document.createElement('div');
+  paw.className = 'paw-print';
+  paw.style.left = e.clientX + 'px';
+  paw.style.top = e.clientY + 'px';
+  paw.innerHTML = pawSVG;
+  document.body.appendChild(paw);
+  setTimeout(() => paw.remove(), 2800);
+});
+
+document.querySelectorAll('.project-media .media-wrapper').forEach(wrapper => {
+  wrapper.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const video = wrapper.querySelector('video');
+    if(video){
+      const src = video.getAttribute('src');
+      if(src) window.open(src, '_blank');
+    }
+  });
+});
+
+
+
+// 9. PHOTO LIGHTBOX
+// =============================================
+const plbox = document.getElementById('photoLightbox');
+const plImg = document.getElementById('plImage');
+const plClose = document.getElementById('plClose');
+
+document.querySelectorAll('.photo-grid .project-media .media-wrapper').forEach(w => {
+  w.addEventListener('click', function(e){
+    e.stopPropagation();
+    const img = this.querySelector('img');
+    if(img && img.getAttribute('src')){
+      plImg.src = img.getAttribute('src');
+      plbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  });
+});
+
+plClose.addEventListener('click', function(){
+  plbox.classList.remove('active');
+  document.body.style.overflow = '';
+  setTimeout(function(){ plImg.src = ''; }, 300);
+});
+plbox.addEventListener('click', function(e){
+  if(e.target === plbox){
+    plbox.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(function(){ plImg.src = ''; }, 300);
+  }
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && plbox.classList.contains('active')){
+    plbox.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(function(){ plImg.src = ''; }, 300);
+  }
+});
+
+// =============================================
+// 11. MESSAGE BOARD
+// =============================================
+// ⚠️ 使用前请配置 Supabase（2分钟注册）
+// 1. 打开 https://supabase.com → Sign up (GitHub账号最快)
+// 2. Create a project → 记下 Project URL 和 anon public key
+// 3. SQL Editor 里执行下面的建表语句
+// 4. 把 URL 和 KEY 填到下面两个引号里
+//
+// 建表 SQL（在 Supabase SQL Editor 运行）:
+// CREATE TABLE messages (
+//   id bigint generated by default as identity primary key,
+//   text text not null,
+//   time timestamp with time zone default now()
+// );
+// ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+// CREATE POLICY "anon_insert" ON messages FOR INSERT TO anon WITH CHECK (true);
+// CREATE POLICY "anon_select" ON messages FOR SELECT TO anon USING (true);
+
+const SUPABASE_URL = 'https://bnzwmdyptrfojfpiwepo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_aDZAtv2KXgK28CLBYnmr3A_e-gYrfIc';
+const ADMIN_PASSWORD = '112233';
+const msgInput = document.getElementById('msgInput');
+const msgSubmit = document.getElementById('msgSubmit');
+const msgStatus = document.getElementById('msgStatus');
+
+// Always save locally as fallback, try cloud if configured
+function saveLocal(text){
+  var data = {text:text, time:new Date().toISOString()};
+  var stored = localStorage.getItem('site_msgs');
+  var msgs = stored ? JSON.parse(stored) : [];
+  msgs.push(data);
+  localStorage.setItem('site_msgs', JSON.stringify(msgs));
+}
+
+msgSubmit.addEventListener('click', function(){
+  var text = msgInput.value.trim();
+  if(!text){ msgStatus.textContent = '请输入内容'; return; }
+  msgSubmit.disabled = true;
+  msgStatus.textContent = '发送中…';
+  saveLocal(text);
+  msgInput.value = '';
+
+  // Save to Supabase cloud if configured
+  if(SUPABASE_URL && SUPABASE_KEY){
+    fetch(SUPABASE_URL + '/rest/v1/messages', {
+      method:'POST',
+      headers:{
+        'apikey':SUPABASE_KEY,
+        'Authorization':'Bearer ' + SUPABASE_KEY,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({text:text})
+    }).then(function(r){
+      msgStatus.textContent = r.ok ? '✓ 已发送' : '发送失败';
+    }).catch(function(){
+      msgStatus.textContent = '✓ 已保存（本地）';
+    });
+  } else {
+    msgStatus.textContent = '✓ 已保存';
+  }
+  msgSubmit.disabled = false;
+  setTimeout(function(){ msgStatus.textContent = ''; }, 2500);
+});
+
+// =============================================
+// 12. ADMIN PANEL
+// =============================================
+const adminOverlay = document.getElementById('adminOverlay');
+const adminPwd = document.getElementById('adminPwd');
+const adminLogin = document.getElementById('adminLogin');
+const adminMsgs = document.getElementById('adminMsgs');
+const adminClose = document.getElementById('adminClose');
+
+document.querySelector('.hero-cat-head svg').addEventListener('dblclick', function(){
+  adminOverlay.classList.add('active');
+  adminPwd.value = '';
+  adminMsgs.innerHTML = '';
+});
+
+adminClose.addEventListener('click', function(){ adminOverlay.classList.remove('active'); });
+
+adminLogin.addEventListener('click', function(){
+  if(adminPwd.value !== ADMIN_PASSWORD){
+    adminMsgs.innerHTML = '<div style="color:#e74c3c;font-size:0.75rem;text-align:center;padding:10px">密码错误</div>';
+    return;
+  }
+
+  function renderMsgs(all){
+    if(!all || all.length === 0){
+      adminMsgs.innerHTML = '<div style="color:var(--muted-text);font-size:0.8rem;text-align:center;padding:20px">暂无留言</div>';
+      return;
+    }
+    var html = '';
+    for(var i=all.length-1; i>=0; i--){
+      var m = all[i];
+      var d = new Date(m.time || m.created_at);
+      var timeStr = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
+      html += '<div class="admin-msg-item"><div>'+(m.text||'')+'</div><div class="admin-msg-time">'+timeStr+'</div></div>';
+    }
+    adminMsgs.innerHTML = html;
+  }
+
+  // Try cloud first, fallback to local
+  if(SUPABASE_URL && SUPABASE_KEY){
+    fetch(SUPABASE_URL + '/rest/v1/messages?order=time.asc', {
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    }).then(function(r){ return r.json(); }).then(function(data){
+      renderMsgs(data);
+    }).catch(function(){
+      var stored = localStorage.getItem('site_msgs');
+      renderMsgs(stored ? JSON.parse(stored) : []);
+    });
+  } else {
+    var stored = localStorage.getItem('site_msgs');
+    renderMsgs(stored ? JSON.parse(stored) : []);
+  }
+});
+
+// Carousel dots
+const track = document.getElementById('carouselTrack');
+const dots = document.querySelectorAll('.carousel-dots .dot');
+let currentSlide = 0;
+
+dots.forEach(function(dot){
+  dot.addEventListener('click', function(){
+    var idx = parseInt(this.getAttribute('data-index'));
+    currentSlide = idx;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    dots.forEach(function(d){ d.classList.remove('active'); });
+    this.classList.add('active');
+  });
+});
+
+// Auto-slide every 4 seconds
+setInterval(function(){
+  currentSlide = (currentSlide + 1) % dots.length;
+  track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+  dots.forEach(function(d){ d.classList.remove('active'); });
+  dots[currentSlide].classList.add('active');
+}, 4000);
+
+// WeChat QR code popup
+document.getElementById('wechatContact').addEventListener('click', function(e){
+  e.preventDefault();
+  plImg.src = '二维码.png';
+  plbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
+// =============================================
+// 10. BACKGROUND MUSIC
+// =============================================
+const musicBtn = document.getElementById('musicToggle');
+const audio = document.getElementById('bgAudio');
+let musicPlaying = true;
+
+// Start muted background playback
+audio.muted = true;
+audio.play().catch(function(){});
+musicBtn.classList.add('playing');
+
+// First click unmutes and ensures playback
+function firstClick(){
+  audio.muted = false;
+  if(audio.paused){
+    audio.play().catch(function(){});
+  }
+  musicPlaying = true;
+  document.removeEventListener('click', firstClick);
+  document.removeEventListener('touchstart', firstClick);
+}
+document.addEventListener('click', firstClick);
+document.addEventListener('touchstart', firstClick);
+
+// Toggle play/pause on button click
+const darkToggle = document.getElementById('darkToggle');
+if(localStorage.getItem('darkMode') === 'true'){
+  document.body.classList.add('dark');
+}
+
+darkToggle.addEventListener('click', function(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+});
+
+musicBtn.addEventListener('click', function(e){
+  e.stopPropagation();
+  if(audio.paused || audio.muted){
+    audio.muted = false;
+    audio.play().catch(function(){});
+    musicBtn.classList.add('playing');
+    musicPlaying = true;
+  } else {
+    audio.pause();
+    musicBtn.classList.remove('playing');
+    musicPlaying = false;
+  }
+});
+
+audio.addEventListener('ended', function(){
+  musicBtn.classList.remove('playing');
+  musicPlaying = false;
+});
+</script>
+</body>
+</html>
