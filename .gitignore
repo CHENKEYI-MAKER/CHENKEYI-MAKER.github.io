@@ -1,3 +1,10 @@
 .DS_Store
 F000002usg9o4GTAKf_1.flac
 index_backup.html
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
