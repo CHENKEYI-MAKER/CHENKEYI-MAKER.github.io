@@ -697,6 +697,39 @@ function SkillMatrix() {
 function Works() {
   const photos = media.photos;
   const videos = media.videos;
+  const [lightbox, setLightbox] = useState<{ type: 'video' | 'photo'; index: number } | null>(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightbox(null);
+      if (lightbox.type === 'photo' && event.key === 'ArrowRight') {
+        setLightbox({ type: 'photo', index: (lightbox.index + 1) % photos.length });
+      }
+      if (lightbox.type === 'photo' && event.key === 'ArrowLeft') {
+        setLightbox({ type: 'photo', index: (lightbox.index - 1 + photos.length) % photos.length });
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [lightbox, photos.length]);
+
+  const nextPhoto = () => {
+    if (!lightbox || lightbox.type !== 'photo') return;
+    setLightbox({ type: 'photo', index: (lightbox.index + 1) % photos.length });
+  };
+
+  const prevPhoto = () => {
+    if (!lightbox || lightbox.type !== 'photo') return;
+    setLightbox({ type: 'photo', index: (lightbox.index - 1 + photos.length) % photos.length });
+  };
 
   return (
     <section id="works" className="bg-black px-6 py-32 md:px-12">
@@ -721,7 +754,15 @@ function Works() {
             transition={{ duration: 0.8 }}
             className="md:col-span-7"
           >
-            <LazyVideo src={videos[0]} autoPlay muted loop playsInline className="h-[360px] w-full rounded-3xl border border-white/10 object-cover md:h-[520px]" />
+            <button
+              type="button"
+              onClick={() => setLightbox({ type: 'video', index: 0 })}
+              className="media-trigger group relative block w-full overflow-hidden rounded-3xl text-left"
+              aria-label="打开视频作品 1"
+            >
+              <LazyVideo src={videos[0]} autoPlay muted loop playsInline className="h-[360px] w-full rounded-3xl border border-white/10 object-cover md:h-[520px]" />
+              <span className="media-trigger-label">PLAY VIDEO 01</span>
+            </button>
           </motion.div>
           <div className="grid gap-4 md:col-span-5">
             {videos.slice(1, 4).map((src, index) => (
@@ -732,14 +773,22 @@ function Works() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.8, delay: index * 0.08 }}
               >
-                <LazyVideo
-                  src={src}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="h-[160px] w-full rounded-2xl border border-white/10 object-cover"
-                />
+                <button
+                  type="button"
+                  onClick={() => setLightbox({ type: 'video', index: index + 1 })}
+                  className="media-trigger group relative block w-full overflow-hidden rounded-2xl text-left"
+                  aria-label={`打开视频作品 ${index + 2}`}
+                >
+                  <LazyVideo
+                    src={src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="h-[160px] w-full rounded-2xl border border-white/10 object-cover"
+                  />
+                  <span className="media-trigger-label is-small">PLAY 0{index + 2}</span>
+                </button>
               </motion.div>
             ))}
           </div>
@@ -747,20 +796,119 @@ function Works() {
 
         <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-6">
           {photos.map((src, index) => (
-            <motion.img
+            <motion.button
               key={src}
-              src={src}
-              alt={`摄影作品 ${index + 1}`}
-              loading="lazy"
+              type="button"
+              onClick={() => setLightbox({ type: 'photo', index })}
+              aria-label={`打开摄影作品 ${index + 1}`}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.75, delay: index * 0.05 }}
-              className={`${index === 4 || index === 5 ? 'md:col-span-2' : 'md:col-span-1'} h-[220px] w-full rounded-2xl border border-white/10 object-cover grayscale-[20%] transition duration-500 hover:grayscale-0`}
-            />
+              className={`${index === 4 || index === 5 ? 'md:col-span-2' : 'md:col-span-1'} media-trigger group relative overflow-hidden rounded-2xl text-left`}
+            >
+              <img
+                src={src}
+                alt={`摄影作品 ${index + 1}`}
+                loading="lazy"
+                className="h-[220px] w-full rounded-2xl border border-white/10 object-cover grayscale-[20%] transition duration-500 group-hover:scale-[1.035] group-hover:grayscale-0"
+              />
+              <span className="media-trigger-label is-small">VIEW {String(index + 1).padStart(2, '0')}</span>
+            </motion.button>
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/88 px-4 py-6 backdrop-blur-xl sm:px-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setLightbox(null)}
+          >
+            <motion.div
+              className="relative flex h-full w-full max-w-6xl flex-col justify-center"
+              initial={{ opacity: 0, scale: 0.96, y: 18 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 18 }}
+              transition={{ duration: 0.28, ease: easeOut }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mb-4 flex items-center justify-between gap-4 text-white">
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/35">
+                    {lightbox.type === 'video' ? 'Video Work' : 'Photo Carousel'}
+                  </p>
+                  <p className="mt-1 text-[15px] text-white/70">
+                    {String(lightbox.index + 1).padStart(2, '0')} / {String(lightbox.type === 'video' ? videos.length : photos.length).padStart(2, '0')}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setLightbox(null)}
+                  className="rounded-full border border-white/15 bg-white/10 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.14em] text-white/80 backdrop-blur-md transition hover:bg-white hover:text-black"
+                >
+                  Close
+                </button>
+              </div>
+
+              {lightbox.type === 'video' ? (
+                <video
+                  key={videos[lightbox.index]}
+                  src={videos[lightbox.index]}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[78dvh] w-full rounded-3xl border border-white/10 bg-black object-contain shadow-2xl"
+                />
+              ) : (
+                <div className="relative">
+                  <img
+                    key={photos[lightbox.index]}
+                    src={photos[lightbox.index]}
+                    alt={`摄影作品 ${lightbox.index + 1}`}
+                    className="max-h-[78dvh] w-full rounded-3xl border border-white/10 bg-black object-contain shadow-2xl"
+                  />
+                  <button
+                    type="button"
+                    onClick={prevPhoto}
+                    className="gallery-arrow left-3 sm:left-5"
+                    aria-label="上一张照片"
+                  >
+                    Prev
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextPhoto}
+                    className="gallery-arrow right-3 sm:right-5"
+                    aria-label="下一张照片"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+
+              {lightbox.type === 'photo' && (
+                <div className="mt-4 flex justify-center gap-2">
+                  {photos.map((photo, index) => (
+                    <button
+                      key={photo}
+                      type="button"
+                      onClick={() => setLightbox({ type: 'photo', index })}
+                      className={`h-1.5 rounded-full transition-all ${index === lightbox.index ? 'w-10 bg-white' : 'w-4 bg-white/25 hover:bg-white/50'}`}
+                      aria-label={`跳转到照片 ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

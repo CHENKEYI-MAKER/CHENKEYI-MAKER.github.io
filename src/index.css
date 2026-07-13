@@ -191,11 +191,111 @@ code, pre, .font-mono { font-family: var(--font-mono); }
   color: #fff;
 }
 
+.media-trigger {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.media-trigger::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.14), transparent 28%),
+    linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.58));
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+}
+
+.media-trigger:hover::after {
+  opacity: 1;
+}
+
+.media-trigger video,
+.media-trigger img {
+  display: block;
+}
+
+.media-trigger-label {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.38);
+  color: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  opacity: 0;
+  transform: translateY(8px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: opacity 220ms ease, transform 220ms ease, background 220ms ease;
+}
+
+.media-trigger-label.is-small {
+  left: 12px;
+  bottom: 12px;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 10px;
+}
+
+.media-trigger:hover .media-trigger-label,
+.media-trigger:focus-visible .media-trigger-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  min-width: 58px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(255, 255, 255, 0.84);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.gallery-arrow:hover {
+  background: rgba(255, 255, 255, 0.92);
+  color: #000;
+  transform: translateY(-50%) scale(1.03);
+}
+
 @media (max-width: 640px) {
   .music-toggle {
     right: 12px;
     bottom: 12px;
     height: 38px;
     padding: 0 12px;
+  }
+
+  .media-trigger-label {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gallery-arrow {
+    min-width: 48px;
+    height: 38px;
+    font-size: 10px;
   }
 }
