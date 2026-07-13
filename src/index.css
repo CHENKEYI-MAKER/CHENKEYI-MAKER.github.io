@@ -280,6 +280,53 @@ code, pre, .font-mono { font-family: var(--font-mono); }
   transform: translateY(-50%) scale(1.03);
 }
 
+.photo-thumb {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  opacity: .58;
+  transition: opacity 220ms ease, border-color 220ms ease, transform 220ms ease;
+}
+
+.photo-thumb:hover,
+.photo-thumb.is-active {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.44);
+  transform: translateY(-1px);
+}
+
+.photo-thumb img {
+  filter: grayscale(28%);
+  transition: transform 320ms ease, filter 320ms ease;
+}
+
+.photo-thumb:hover img,
+.photo-thumb.is-active img {
+  transform: scale(1.045);
+  filter: grayscale(0%);
+}
+
+.photo-thumb span {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: grid;
+  min-width: 28px;
+  height: 24px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.44);
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
 @media (max-width: 640px) {
   .music-toggle {
     right: 12px;
@@ -297,5 +344,10 @@ code, pre, .font-mono { font-family: var(--font-mono); }
     min-width: 48px;
     height: 38px;
     font-size: 10px;
+  }
+
+  .photo-thumb {
+    height: 86px;
+    border-radius: 14px;
   }
 }

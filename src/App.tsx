@@ -698,6 +698,7 @@ function Works() {
   const photos = media.photos;
   const videos = media.videos;
   const [lightbox, setLightbox] = useState<{ type: 'video' | 'photo'; index: number } | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   useEffect(() => {
     if (!lightbox) return;
@@ -723,12 +724,29 @@ function Works() {
 
   const nextPhoto = () => {
     if (!lightbox || lightbox.type !== 'photo') return;
-    setLightbox({ type: 'photo', index: (lightbox.index + 1) % photos.length });
+    const next = (lightbox.index + 1) % photos.length;
+    setGalleryIndex(next);
+    setLightbox({ type: 'photo', index: next });
   };
 
   const prevPhoto = () => {
     if (!lightbox || lightbox.type !== 'photo') return;
-    setLightbox({ type: 'photo', index: (lightbox.index - 1 + photos.length) % photos.length });
+    const prev = (lightbox.index - 1 + photos.length) % photos.length;
+    setGalleryIndex(prev);
+    setLightbox({ type: 'photo', index: prev });
+  };
+
+  const nextGallery = () => {
+    setGalleryIndex((current) => (current + 1) % photos.length);
+  };
+
+  const prevGallery = () => {
+    setGalleryIndex((current) => (current - 1 + photos.length) % photos.length);
+  };
+
+  const openPhoto = (index: number) => {
+    setGalleryIndex(index);
+    setLightbox({ type: 'photo', index });
   };
 
   return (
@@ -794,28 +812,65 @@ function Works() {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-6">
-          {photos.map((src, index) => (
-            <motion.button
-              key={src}
+        <div className="mt-5 grid gap-4 lg:grid-cols-[1.35fr_.65fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8 }}
+            className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035]"
+          >
+            <button
               type="button"
-              onClick={() => setLightbox({ type: 'photo', index })}
-              aria-label={`打开摄影作品 ${index + 1}`}
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.75, delay: index * 0.05 }}
-              className={`${index === 4 || index === 5 ? 'md:col-span-2' : 'md:col-span-1'} media-trigger group relative overflow-hidden rounded-2xl text-left`}
+              onClick={() => openPhoto(galleryIndex)}
+              className="media-trigger group relative block w-full overflow-hidden rounded-3xl text-left"
+              aria-label={`打开摄影作品 ${galleryIndex + 1}`}
             >
               <img
-                src={src}
-                alt={`摄影作品 ${index + 1}`}
-                loading="lazy"
-                className="h-[220px] w-full rounded-2xl border border-white/10 object-cover grayscale-[20%] transition duration-500 group-hover:scale-[1.035] group-hover:grayscale-0"
+                key={photos[galleryIndex]}
+                src={photos[galleryIndex]}
+                alt={`摄影作品 ${galleryIndex + 1}`}
+                className="h-[420px] w-full rounded-3xl object-cover transition duration-500 group-hover:scale-[1.025] md:h-[560px]"
               />
-              <span className="media-trigger-label is-small">VIEW {String(index + 1).padStart(2, '0')}</span>
-            </motion.button>
-          ))}
+              <span className="media-trigger-label">OPEN PHOTO {String(galleryIndex + 1).padStart(2, '0')}</span>
+            </button>
+            <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/35 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/75 backdrop-blur-md">
+              Photo Carousel / {String(galleryIndex + 1).padStart(2, '0')} of {String(photos.length).padStart(2, '0')}
+            </div>
+            <button type="button" onClick={prevGallery} className="gallery-arrow left-4" aria-label="上一张照片">
+              Prev
+            </button>
+            <button type="button" onClick={nextGallery} className="gallery-arrow right-4" aria-label="下一张照片">
+              Next
+            </button>
+          </motion.div>
+
+          <div className="grid grid-cols-3 gap-3 lg:grid-cols-2">
+            {photos.map((src, index) => (
+              <motion.button
+                key={src}
+                type="button"
+                onClick={() => {
+                  setGalleryIndex(index);
+                  openPhoto(index);
+                }}
+                aria-label={`打开摄影作品 ${index + 1}`}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.65, delay: index * 0.04 }}
+                className={`photo-thumb ${index === galleryIndex ? 'is-active' : ''}`}
+              >
+                <img
+                  src={src}
+                  alt={`摄影作品缩略图 ${index + 1}`}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+                <span>{String(index + 1).padStart(2, '0')}</span>
+              </motion.button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -898,7 +953,10 @@ function Works() {
                     <button
                       key={photo}
                       type="button"
-                      onClick={() => setLightbox({ type: 'photo', index })}
+                      onClick={() => {
+                        setGalleryIndex(index);
+                        setLightbox({ type: 'photo', index });
+                      }}
                       className={`h-1.5 rounded-full transition-all ${index === lightbox.index ? 'w-10 bg-white' : 'w-4 bg-white/25 hover:bg-white/50'}`}
                       aria-label={`跳转到照片 ${index + 1}`}
                     />
