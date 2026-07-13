@@ -1,3 +1,8 @@
 .DS_Store
+node_modules/
+dist/
+tsconfig.tsbuildinfo
+.vite/
+design-previews*/
+design-previews-source-assets.jpg
 F000002usg9o4GTAKf_1.flac
-index_backup.html
