@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Space Mono"', 'monospace'],
-        serif: ['"Space Mono"', 'monospace'],
+        sans: ['"Outfit"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
+        serif: ['"Outfit"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
         mono: ['"Space Mono"', 'monospace']
       }
     }

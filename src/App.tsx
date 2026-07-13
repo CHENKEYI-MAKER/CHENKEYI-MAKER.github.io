@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, VideoHTMLAttributes } from 'react';
 import {
   AnimatePresence,
   motion,
@@ -18,20 +19,21 @@ const remoteVideos = {
 
 const media = {
   photos: [
-    new URL('../微信图片_20260511210751_21_120.jpg', import.meta.url).href,
-    new URL('../微信图片_20260511210756_22_120.jpg', import.meta.url).href,
-    new URL('../微信图片_20260511210800_23_120.jpg', import.meta.url).href,
-    new URL('../微信图片_20260511210804_24_120.jpg', import.meta.url).href,
-    new URL('../微信图片_20260511210819_25_120.jpg', import.meta.url).href,
-    new URL('../微信图片_20260511210823_26_120.jpg', import.meta.url).href
+    new URL('../optimized-media/photos/微信图片_20260511210751_21_120.jpg', import.meta.url).href,
+    new URL('../optimized-media/photos/微信图片_20260511210756_22_120.jpg', import.meta.url).href,
+    new URL('../optimized-media/photos/微信图片_20260511210800_23_120.jpg', import.meta.url).href,
+    new URL('../optimized-media/photos/微信图片_20260511210804_24_120.jpg', import.meta.url).href,
+    new URL('../optimized-media/photos/微信图片_20260511210819_25_120.jpg', import.meta.url).href,
+    new URL('../optimized-media/photos/微信图片_20260511210823_26_120.jpg', import.meta.url).href
   ],
   videos: [
-    new URL('../微信视频2026-05-11_210205_450.mp4', import.meta.url).href,
-    new URL('../微信视频2026-05-11_210900_854.mp4', import.meta.url).href,
-    new URL('../微信视频2026-05-11_210911_497.mp4', import.meta.url).href,
-    new URL('../微信视频2026-05-11_210951_974.mp4', import.meta.url).href
+    new URL('../optimized-media/videos/微信视频2026-05-11_210205_450.mp4', import.meta.url).href,
+    new URL('../optimized-media/videos/微信视频2026-05-11_210900_854.mp4', import.meta.url).href,
+    new URL('../optimized-media/videos/微信视频2026-05-11_210911_497.mp4', import.meta.url).href,
+    new URL('../optimized-media/videos/微信视频2026-05-11_210951_974.mp4', import.meta.url).href
   ],
-  qr: new URL('../二维码.png', import.meta.url).href
+  qr: new URL('../二维码.png', import.meta.url).href,
+  music: new URL('../background-music.mp3', import.meta.url).href
 };
 
 const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~|}{[]:;?><';
@@ -44,6 +46,134 @@ function randomChar() {
 
 function scrollToSection(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function LazyVideo({ src, className, rootMargin = '420px', ...props }: Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src'> & { src: string; rootMargin?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [activeSrc, setActiveSrc] = useState<string | undefined>();
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const load = () => setActiveSrc(src);
+    if (!('IntersectionObserver' in window)) {
+      load();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          load();
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [rootMargin, src]);
+
+  return <video ref={ref} src={activeSrc} className={className} preload="metadata" {...props} />;
+}
+
+function PawCursor() {
+  const [position, setPosition] = useState({ x: -100, y: -100 });
+  const [hovering, setHovering] = useState(false);
+  const [prints, setPrints] = useState<Array<{ id: number; x: number; y: number; rotation: number }>>([]);
+
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    document.body.classList.add('custom-paw-cursor');
+
+    const onMove = (event: MouseEvent) => {
+      setPosition({ x: event.clientX, y: event.clientY });
+      const target = event.target as HTMLElement | null;
+      setHovering(Boolean(target?.closest('a, button, video, img, [data-cursor-hover]')));
+    };
+    const onClick = (event: MouseEvent) => {
+      const id = Date.now() + Math.random();
+      setPrints((current) => [
+        ...current.slice(-11),
+        { id, x: event.clientX, y: event.clientY, rotation: Math.random() * 44 - 22 }
+      ]);
+      window.setTimeout(() => {
+        setPrints((current) => current.filter((item) => item.id !== id));
+      }, 2400);
+    };
+
+    window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('click', onClick, { passive: true });
+    return () => {
+      document.body.classList.remove('custom-paw-cursor');
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('click', onClick);
+    };
+  }, []);
+
+  return (
+    <>
+      <div className={`paw-cursor ${hovering ? 'is-hovering' : ''}`} style={{ left: position.x, top: position.y }} aria-hidden="true">
+        <span className="toe toe-1" />
+        <span className="toe toe-2" />
+        <span className="toe toe-3" />
+        <span className="toe toe-4" />
+        <span className="pad" />
+      </div>
+      {prints.map((print) => (
+        <div
+          key={print.id}
+          className="paw-print"
+          style={{ left: print.x, top: print.y, '--paw-rotation': `${print.rotation}deg` } as CSSProperties & Record<string, string | number>}
+          aria-hidden="true"
+        >
+          <span className="toe toe-1" />
+          <span className="toe toe-2" />
+          <span className="toe toe-3" />
+          <span className="toe toe-4" />
+          <span className="pad" />
+        </div>
+      ))}
+    </>
+  );
+}
+
+function MusicToggle() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggleMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.volume = 0.42;
+      try {
+        await audio.play();
+        setPlaying(true);
+      } catch {
+        setPlaying(false);
+      }
+    } else {
+      audio.pause();
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src={media.music} loop preload="none" />
+      <button
+        type="button"
+        onClick={toggleMusic}
+        className={`music-toggle ${playing ? 'is-playing' : ''}`}
+        aria-label={playing ? '暂停背景音乐' : '播放背景音乐'}
+      >
+        <span>{playing ? 'PAUSE' : 'MUSIC'}</span>
+        <i>{playing ? 'ON' : 'OFF'}</i>
+      </button>
+    </>
+  );
 }
 
 function ScrambleIn({ text, delay, triggered }: { text: string; delay: number; triggered: boolean }) {
@@ -314,7 +444,7 @@ function Hero({ entranceComplete }: { entranceComplete: boolean }) {
 
   return (
     <section id="top" onMouseMove={onMouseMove} className="video-scrim relative flex h-screen h-[100dvh] min-h-[100dvh] overflow-hidden px-4 pb-8 pt-20 sm:px-6 sm:pb-12 sm:pt-24 md:px-8">
-      <video ref={videoRef} src={remoteVideos.hero} className="absolute inset-0 h-full w-full object-cover" playsInline preload="auto" muted />
+      <video ref={videoRef} src={remoteVideos.hero} className="absolute inset-0 h-full w-full object-cover" playsInline preload="metadata" muted />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.05]" />
       <div className="watermark-text pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 translate-y-[50px] select-none whitespace-nowrap text-center text-[clamp(120px,30vw,521px)] uppercase leading-none tracking-[-4px] opacity-10">
         PORTFOLIO
@@ -363,7 +493,7 @@ function CinematicAbout() {
 
   return (
     <section id="about" ref={ref} className="relative flex min-h-screen items-center justify-center overflow-hidden py-32">
-      <video src={remoteVideos.cinematic} autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
+      <LazyVideo src={remoteVideos.cinematic} autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute left-0 right-0 top-0 z-10 h-[180px] bg-gradient-to-b from-[#010103] to-transparent" />
       <div className="absolute inset-0 bg-black/55" />
       <div className="relative z-20 grid w-full max-w-6xl gap-12 px-6 md:grid-cols-[1.2fr_.8fr] md:px-12">
@@ -416,7 +546,7 @@ function Metrics() {
 
   return (
     <section className="relative min-h-screen overflow-hidden px-6 py-32">
-      <video src={remoteVideos.metrics} autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
+      <LazyVideo src={remoteVideos.metrics} autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-black/68" />
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center">
         <motion.p
@@ -510,7 +640,7 @@ function SkillMatrix() {
 
   return (
     <section id="skills" className="relative flex min-h-screen flex-col overflow-hidden px-8 py-12 sm:px-12 sm:py-16 md:px-16">
-      <video src={remoteVideos.tech} autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
+      <LazyVideo src={remoteVideos.tech} autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-black/68" />
       <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <motion.h2
@@ -591,23 +721,26 @@ function Works() {
             transition={{ duration: 0.8 }}
             className="md:col-span-7"
           >
-            <video src={videos[0]} autoPlay muted loop playsInline className="h-[360px] w-full rounded-3xl border border-white/10 object-cover md:h-[520px]" />
+            <LazyVideo src={videos[0]} autoPlay muted loop playsInline className="h-[360px] w-full rounded-3xl border border-white/10 object-cover md:h-[520px]" />
           </motion.div>
           <div className="grid gap-4 md:col-span-5">
             {videos.slice(1, 4).map((src, index) => (
-              <motion.video
+              <motion.div
                 key={src}
-                src={src}
-                autoPlay
-                muted
-                loop
-                playsInline
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.8, delay: index * 0.08 }}
-                className="h-[160px] w-full rounded-2xl border border-white/10 object-cover"
-              />
+              >
+                <LazyVideo
+                  src={src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-[160px] w-full rounded-2xl border border-white/10 object-cover"
+                />
+              </motion.div>
             ))}
           </div>
         </div>
@@ -700,7 +833,7 @@ function Footer() {
     <footer className="overflow-hidden bg-black">
       <div className="flex min-h-[400px] flex-col md:flex-row">
         <div className="relative h-[300px] md:h-auto md:w-1/2">
-          <video src={remoteVideos.footer} autoPlay muted loop playsInline className="h-full w-full object-cover" />
+          <LazyVideo src={remoteVideos.footer} autoPlay muted loop playsInline className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-black/35" />
         </div>
         <div className="flex flex-col justify-between p-10 sm:p-16 md:w-1/2">
@@ -729,7 +862,9 @@ export default function App() {
   }, []);
 
   return (
-    <div style={{ fontFamily: '"Space Mono", monospace' }} className="min-h-screen bg-black text-white">
+    <div style={{ fontFamily: 'var(--font-sans)' }} className="min-h-screen bg-black text-white">
+      <PawCursor />
+      <MusicToggle />
       <NavBar entranceComplete={entranceComplete} />
       <Hero entranceComplete={entranceComplete} />
       <CinematicAbout />
